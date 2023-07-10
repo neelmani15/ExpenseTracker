@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+<header class="p-3 text-bg-dark">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white heading text-decoration-none">
+        Expenses Tracker
+        <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg> -->
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <!-- <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> -->
+        <!-- <li><a href="/submit" class="nav-link px-2 text-white">Add Expenses</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">View Expenses</a></li> -->
+      </ul>
+      <div class="text-end">
+        <a role="button" href="/login" class="btn btn-outline-light me-2">Login</a>
+        <a role="button" href="/register" class="btn btn-warning">Register</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container mt-5">
+  <div class="row1" style="height: 84vh;">
+    <div class="col1">
+      <h1 class="heading1">Turn Expenses into data.</h1>
+      <p>Get paper off your desk and into action.</p>
+      <a class="btn btn-dark m-1 button1" href="/login" role="button">Login</a>
+    </div>
+
+    <div class="col1">
+      <h1 style="text-align: center;">Register</h1>
+      <div class="card card6">
+        <div class="card-body">
+          <% if (message && message.length > 0) { %>
+            <div class="error">
+              <% message.forEach(function(msg) { %>
+                <p><%= msg %></p>
+              <% }) %>
+            </div>
+          <% } %>
+        
+          <!-- Makes POST request to /login route -->
+          <form action="/register" method="POST">
+            <div class="form-group m-1 p-2">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" name="username">
+            </div>
+            <div class="form-group m-1 p-2">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" name="password">
+            </div>
+            <div class="button">
+              <button type="submit" class="btn btn-dark m-2 pl-3 pr-3">Register</button>
+            </div>
+          </form>
+          <p class="para mt-2">Alredy have account? <a href="/login"> Login</a></p>
+
+        </div>
+      </div>
+      <div class="mt-2 button">
+          <a class="btn btn-block btn-social btn-google google" href="/auth/google" role="button">Sign Up with 
+            <i class="fab fa-google google-icon"></i>
+          </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>

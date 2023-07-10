@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+<header class="p-3 text-bg-dark">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white heading text-decoration-none">
+        Expenses Tracker
+        <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg> -->
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <!-- <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> -->
+        <!-- <li><a href="/submit" class="nav-link px-2 text-white">Add Expenses</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">View Expenses</a></li> -->
+      </ul>
+      <div class="text-end">
+        <a role="button" href="/login" class="btn btn-outline-light me-2">Login</a>
+        <a role="button" href="/register" class="btn btn-warning">Register</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="jumbotron centered1">
+  <div class="container">
+    <!-- <i class="fas fa-key fa-6x"></i> -->
+    <i class='fa fa-hourglass-2 fa-6x'></i>
+    <h1 class="display-3">Expense Tracker</h1>
+    <h6 class="lead">Keep the record of all Expenses</h6>
+    <hr size="8">
+    <a class="btn btn-light btn-lg" href="/register" role="button">Register</a>
+    <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,191 @@
+body {
+  background-color: rgb(252, 252, 219);
+}
+
+.centered {
+  padding-top: 100px;
+  text-align: center;
+}
+
+.centered1 {
+  padding-top: 220px;
+  text-align: center;
+}
+
+.centered2 {
+  padding-top: 30px;
+  margin-bottom: 30px;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: #f5adad;
+  background-color: #000;
+}
+
+.heading {
+  font-family: 'Pacifico', cursive;
+  font-size: 25px;
+}
+
+.heading1 {
+  font-size: 50px;
+}
+
+.row1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.error {
+  text-align: center;
+}
+
+.error p {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: red;
+}
+
+.col1 {
+  margin-left: 100px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-self: center;
+  /* width: 50%; */
+}
+
+.container1 {
+  display: flex;
+  justify-content: center;
+}
+
+.container2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card6 {
+  /* width: 750px; */
+  min-height: 340px;
+  background-color: #54c7fc;
+  box-shadow: 4px 4px #7e7e7e;
+  border-radius: 3%;
+}
+
+.card1 {
+  /* width: 750px; */
+  min-height: 340px;
+  background-color: #c6fff3;
+  box-shadow: 4px 4px #7e7e7e;
+  border-radius: 3%;
+}
+
+.card2 {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: start;
+  width: 100%;
+}
+
+.card3 {
+  display: flex;
+  flex-wrap: wrap;
+  width: 18rem;
+  margin: 10px;
+}
+
+.card4 {
+  flex-basis: calc(100% /5);
+}
+
+.card5 {
+  width: 750px;
+  min-height: 340px;
+  background-color: #f8f192;
+  box-shadow: 4px 4px #7e7e7e;
+  border-radius: 3%;
+}
+
+
+.google {
+  /* border-radius: 50%; */
+  background-color: red;
+  color: white;
+}
+
+.google:hover {
+  background-color: #f38282;
+}
+
+.google-icon {
+  color: white;
+}
+
+.button {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* width: 50%; */
+}
+
+.button1 {
+  width: fit-content;
+}
+
+.para {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.addexpense {
+  margin-left: 50px;
+}
+
+.label1 {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+@media screen and (max-width:800px) {
+  .row1 {
+    display: inline-block;
+  }
+
+  .col1 {
+    margin-left: 30px;
+  }
+
+  .head {
+    font-size: 25px;
+  }
+
+  .card3 {
+    width: 16rem;
+  }
+
+  .card5 {
+    width: 75%;
+  }
+
+  .card2 {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width:450px) {
+  .head1 {
+    font-size: 14px;
+  }
+
+  .head {
+    font-size: 20px;
+  }
+}

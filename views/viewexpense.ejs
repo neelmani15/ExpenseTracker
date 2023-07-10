@@ -1,0 +1,86 @@
+<%- include('partials/header') %>
+<header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/expense" class="d-flex align-items-center mb-2 mb-lg-0 text-white heading text-decoration-none">
+          Expenses Tracker
+          <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg> -->
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <!-- <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> -->
+          <li><a href="/submit" class="nav-link px-2 addexpense text-white">Add Expenses</a></li>
+          <!-- <li><a href="#" class="nav-link px-2 text-white">View Expenses</a></li> -->
+        </ul>
+        <div class="text-end">
+          <!-- <a role="button" href="/login" class="btn btn-outline-light me-2">Login</a> -->
+          <a role="button" href="/logout" class="btn btn-warning">Logout</a>
+        </div>
+      </div>
+    </div>
+</header>
+<div class="container2">
+    <div class="centered2">
+        <h1 class="display-3">Expenses Stats</h1>
+    </div>
+    <div class="card card5">
+        <div class="card-body">
+            <h6 class="head1" style="padding-top: 2px; margin-left: 10px;">
+                Expenses in Housing =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamounthousing %></span>
+            </h6> 
+            <hr/>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Utilities =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamountutilities %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Transportation =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamounttransport %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Groceries =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamountgroceries %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Food =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamountfood %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Entertainment =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamountentertainment %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Education =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamounteducation %></span>
+            </h6>
+            <hr>
+            <h6 class="head1" style="padding-top: 2px;margin-left: 10px;">
+                Expenses in Others =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 18px;"></i>
+                    <%= totalamountother %></span>
+            </h6>
+            <hr>
+            <h2 class="text-center head" style="padding-top: 20px">
+                Total Expenses =<span style="color: rgb(6, 148, 6);"> 
+                    <i class="fa fa-inr" style="font-size: 34px;"></i>
+                    <%= totalamount %></span>
+            </h2>
+            
+            
+        </div>
+    </div>
+</div>
+<%- include('partials/footer') %>

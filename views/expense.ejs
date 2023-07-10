@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+<header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/expense" class="d-flex align-items-center mb-2 mb-lg-0 text-white heading text-decoration-none">
+          Expenses Tracker
+          <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg> -->
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <!-- <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> -->
+          <li><a href="/submit" class="nav-link px-2 addexpense text-white">Add Expenses</a></li>
+          <li><a href="/viewexpense" class="nav-link px-2 text-white">View Expenses</a></li>
+        </ul>
+        <div class="text-end">
+          <!-- <a role="button" href="/login" class="btn btn-outline-light me-2">Login</a> -->
+          <a role="button" href="/logout" class="btn btn-warning">Logout</a>
+        </div>
+      </div>
+    </div>
+</header>
+<h1 class="text-center head" style="padding-top: 30px;">Total Expenses =<span style="color: rgb(6, 148, 6);"> <i class="fa fa-inr" style="font-size: 34px;"></i><%= total %></span></h1> 
+<div class="container1">
+  <div class="container m-5 card2">
+    
+   <% usersWithexpenses.forEach((expense)=>{ %>
+    <div class="card card3">
+      <div class="card-body card4" style=" background-color: #c6fff3;box-shadow: 4px 4px #7e7e7e; border-radius: 4%;">
+        <h5 class="card-title"><%= expense.title %></h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary"><%= expense.category %></h6>
+        <p class="card-text"><%= expense.amount %></p>
+        <a role="button" href="<%= userid %>/edit/<%= expense._id %>" class=" btn btn-primary">Edit</a>
+        <a role="button" href="<%= userid %>/delete/<%= expense._id %>" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+</div>   
+  
+
+<%- include('partials/footer') %>
+  
