@@ -1,15 +1,17 @@
 {
-  "name": "Secrets",
+  "name": "Expense",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "bootstrap-icons": "^1.10.5",
     "connect-flash": "^0.1.1",
     "dotenv": "^6.2.0",
     "ejs": "^2.7.4",
     "express": "^4.18.2",
+    "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
     "mongoose": "^5.13.19",

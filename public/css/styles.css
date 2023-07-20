@@ -154,6 +154,20 @@ body {
   margin-bottom: 5px;
 }
 
+.pagination {
+  /* min-width: fit-content;
+  min-height: fit-content; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.pagination a {
+  text-decoration: none;
+  margin: 7px;
+}
+
 @media screen and (max-width:800px) {
   .row1 {
     display: inline-block;

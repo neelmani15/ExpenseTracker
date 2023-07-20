@@ -2,11 +2,13 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 const { check, validationResult } = require('express-validator');
@@ -16,6 +18,7 @@ const app = express();
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
+app.use(flash());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -29,7 +32,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(flash());
+
 
 mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 mongoose.set("useCreateIndex", true);
@@ -73,6 +76,25 @@ const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
+// passport.use(new LocalStrategy(
+//   { usernameField: 'username' },
+//   async (username, password, done) => {
+//     try {
+//       const user = await User.findOne({ username });
+//       if (!user) {
+//         return done(null, false, { message: 'Invalid username or password' });
+//       }
+//       const validPassword = await bcrypt.compare(password, user.password);
+//       if (!validPassword) {
+//         return done(null, false, { message: 'Invalid username or password' });
+//       }
+//       return done(null, user);
+//     } catch (err) {
+//       return done(err);
+//     }
+//   }
+// ));
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
@@ -114,11 +136,13 @@ app.get("/auth/google/secrets",
   });
 
 app.get("/login", function (req, res) {
-  res.render("login", { message: [] });
+  const formData = req.session.formData || {};
+  delete req.session.formData;
+  res.render("login", { message: req.flash('error'), formData });
 });
 
 app.get("/register", function (req, res) {
-  res.render("register", { message: [] });
+  res.render("register", { message: req.flash('error'), formData: req.flash('formData')[0] });
 });
 
 app.get("/expense", function (req, res) {
@@ -130,13 +154,26 @@ app.get("/expense", function (req, res) {
         console.log(err);
       } else {
         if (foundUsers) {
-          // console.log(foundUsers[0].expenseitems);
-          let expenselist = foundUsers[0].expenseitems;
+          const page = parseInt(req.query.page) || 1;
+          const limit = parseInt(req.query.limit) || 8;
+          const startIndex = (page - 1) * limit;
+          const endIndex = startIndex + limit;
+          let expenselist = foundUsers[0].expenseitems
+          expenselist.sort((a, b) => b.date - a.date);
+          const paginatedExpenses = expenselist.slice(startIndex, endIndex);
+          const totalPages = Math.ceil(expenselist.length / limit);
           let totalamount = 0;
           expenselist.forEach((expense) => {
             totalamount += expense.amount;
           });
-          res.render("expense", { message: [], total: totalamount, userid: userId, usersWithexpenses: foundUsers[0].expenseitems });
+          res.render("expense", {
+            message: [],
+            total: totalamount,
+            userid: userId,
+            usersWithexpenses: paginatedExpenses,
+            currentpage: page,
+            totalpages: totalPages
+          });
         }
       }
     });
@@ -299,7 +336,7 @@ app.get('/viewexpense', (req, res) => {
 })
 app.post('/:uid/edit/:eid',
   [
-    check('title', 'Title must contain atleast 8 character').isLength({ min: 8 }),
+    check('title', 'Title field is required').isAlpha(),
     check('category', 'Category is Required').notEmpty(),
     check('amount', 'Amount must be non negative number').isFloat({ min: 0 })
   ],
@@ -400,7 +437,7 @@ app.get("/submit", function (req, res) {
 
 app.post("/submit",
   [
-    check('title', 'Title must contain atleast 8 character').isLength({ min: 8 }),
+    check('title', 'Title field is required').isAlpha(),
     check('category', 'Category is Required').notEmpty(),
     check('amount', 'Amount must be non negative number').isFloat({ min: 0 })
   ],
@@ -409,6 +446,7 @@ app.post("/submit",
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errorMessages = errors.array().map(e => e.msg);
+      req.flash('error', errorMessages);
       res.render('submit', { message: errorMessages });
     } else {
       const title = req.body.title;
@@ -440,6 +478,7 @@ app.post("/submit",
 
 app.get("/logout", function (req, res) {
   req.logout();
+  req.session.user = null;
   res.redirect("/");
 });
 
@@ -448,42 +487,76 @@ app.post("/register",
     check('username', 'Email is required or Invalid Email').isEmail(),
     check('password', 'Password must be at least 8 characters').isLength({ min: 8 })
   ],
-  function (req, res) {
-    const errors = validationResult(req);
-    // console.log(errors);
-    let err = {}
-    if (!errors.isEmpty()) {
-      let errorMessages = errors.array().map(e => e.msg);
-      // res.flash('error', errorMessages)
-      res.render('register', { message: errorMessages })
-    }
-    else {
-      User.register({ username: req.body.username }, req.body.password, function (err, user) {
-        if (err) {
-          // alert("Username is already exist");
-          res.render("register", { message: ["E-mail already exist"] })
-          // console.log(err);
-        } else {
-          passport.authenticate("local")(req, res, function () {
-            req.flash('success_msg', 'You are registerd and can now login');
-            res.redirect("/expense");
-          });
-        }
-      });
-    }
+  async function (req, res) {
+    // const errors = validationResult(req);
+    // // console.log(errors);
+    // let err = {}
+    // if (!errors.isEmpty()) {
+    //   let errorMessages = errors.array().map(e => e.msg);
+    //   res.flash('error', errorMessages);
+    //   res.flash('formData', req.body);
+    //   res.render('register', { message: errorMessages })
+    // }
 
+    // Check if the username or email already exists in the database
+    // const existingUser = await User.findOne({ username });
+
+    // if (existingUser) {
+    //   req.flash('error', 'Username or email already exists'); // Store the error message in flash
+    //   req.flash('formData', req.body); // Store the submitted form data in flash
+    //   return res.redirect('/register');
+    // }
+
+    //   // Create a new user and save it to the database
+    //   const newUser = new User({ username, password });
+    //   await newUser.save();
+
+    //   // Redirect to the login page after successful registration
+    //   req.flash('success', 'Registration successful');
+    //   return res.redirect('/expense');
+    // } catch (err) {
+    //   console.error(err);
+    //   res.status(500).send('Server Error');
+    // }
+    User.register({ username: req.body.username }, req.body.password, function (err, user) {
+      if (err) {
+        req.flash('error', 'Email already exists or Invalid user'); // Store the error message in flash
+        req.flash('formData', req.body); // Store the submitted form data in flash
+        return res.redirect('/register');
+        // alert("Username is already exist");
+        // res.render("register", { message: ["E-mail already exist"] })
+        // console.log(err);
+      } else {
+        // console.log(user);
+        passport.authenticate("local")(req, res, function () {
+          req.flash('success_msg', 'You are registerd and can now login');
+          res.redirect("/expense");
+        });
+      }
+    });
   });
+// app.post('/login', passport.authenticate('local'), (req, res) => {
+//   // If the control reaches here, it means the login is successful
+//   res.json({ success: true });
+// });
 
 app.post("/login",
   [
     check('username', 'Email is required or Invalid Email').isEmail(),
     check('password', 'Password must be at least 8 characters').isLength({ min: 8 })
   ], function (req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      let errorMessages = errors.array().map(e => e.msg);
-      res.render('login', { message: errorMessages })
-    }
+
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   // console.log(errors);
+    //   let errorMessages = errors.array().map(e => e.msg);
+    //   req.flash('error', errorMessages);
+    //   // res.flash('formData', req.body);
+    //   let formData = req.session.formData || '';
+    //   req.session.formData = req.body;
+    //   // res.redirect('/login');
+    //   res.render('login', { message: errorMessages, formData })
+    // }
     const user = new User({
       username: req.body.username,
       password: req.body.password
@@ -493,11 +566,17 @@ app.post("/login",
         console.log(err);
       }
       if (!user) {
+        req.flash('error', 'Invalid username or password');
+        req.session.formData = req.body;
+        // res.flash('formData', req.body);
+        return res.redirect('/login');
         // Unauthorized access (invalid username or password)
-        return res.render('login', { message: ['Invalid username or password'] });
+        // return res.render('login', { message: ['Invalid username or password'] });
       }
       req.logIn(user, function (err) {
         if (err) {
+          req.flash('error', 'Invalid username or password');
+          // res.flash('formData', req.body);
           console.log(err);
         }
         return res.redirect('/expense');

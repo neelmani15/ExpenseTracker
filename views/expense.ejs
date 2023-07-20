@@ -29,15 +29,25 @@
         <h5 class="card-title"><%= expense.title %></h5>
         <h6 class="card-subtitle mb-2 text-body-secondary"><%= expense.category %></h6>
         <p class="card-text"><%= expense.amount %></p>
-        <a role="button" href="<%= userid %>/edit/<%= expense._id %>" class=" btn btn-primary">Edit</a>
-        <a role="button" href="<%= userid %>/delete/<%= expense._id %>" class="btn btn-danger">Delete</a>
+        <a role="button" href="<%= userid %>/edit/<%= expense._id %>" class=" btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a role="button" href="<%= userid %>/delete/<%= expense._id %>" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
       </div>
     </div>
     <% }) %>
+    
   </div>
+  
 
 </div>   
-  
+<div class="pagination">
+  <% if (currentpage > 1) { %>
+    <a href="/expense?page=<%= currentpage - 1 %>&limit=8" class="btn btn-success"><i class="fa-solid fa-backward"></i></a>
+  <% } %>
+
+  <% if (currentpage < totalpages) { %>
+    <a href="/expense?page=<%= currentpage + 1 %>&limit=8" class="btn btn-success"><i class="fa-solid fa-forward"></i></a>
+  <% } %>
+</div>
 
 <%- include('partials/footer') %>
   
